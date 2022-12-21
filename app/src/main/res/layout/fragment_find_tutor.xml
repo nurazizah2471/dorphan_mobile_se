@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Views.Fragments.FindTutorFragment">
+    android:layout_height="match_parent">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,7 +18,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFindTutorFragment"
@@ -33,6 +34,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
             </androidx.recyclerview.widget.RecyclerView>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

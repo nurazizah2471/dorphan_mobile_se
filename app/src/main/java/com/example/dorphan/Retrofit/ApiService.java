@@ -1,6 +1,7 @@
 package com.example.dorphan.Retrofit;
 
 import com.example.dorphan.Helpers.Const;
+import com.example.dorphan.Models.AddCourseResponse;
 import com.example.dorphan.Models.Course;
 import com.example.dorphan.Models.Register;
 import com.example.dorphan.Models.Skill;
@@ -100,4 +101,12 @@ public class ApiService {
     public Call<Course> getCoursesFromSkill(int skill_id) {
         return api.getCoursesFromSkill(skill_id);
     }
+    public Call<Course> getCourses(int course_id) {
+        return api.getCourses(course_id);
+    }
+
+    public Call<JsonObject> addCourseBooking(int course_id, int member_sum) {
+        return api.addCourseBooking(course_id, member_sum);
+    }
+
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.dorphan.Views.Fragments.TabBerlangsungKursus;
+import com.example.dorphan.Views.Fragments.TabPesananKursus;
 import com.example.dorphan.Views.Fragments.TabRiwayatKursus;
 
 public class rvAdapter_kursusFragment extends FragmentStateAdapter {
@@ -31,7 +32,7 @@ public class rvAdapter_kursusFragment extends FragmentStateAdapter {
 
         switch (position) {
             case 0:
-//                a = new TabPesananKursus();
+                a = new TabPesananKursus();
                 break;
             case 1:
                 a = new TabBerlangsungKursus();
