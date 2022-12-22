@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_find"
         android:title="Cari" />
     <item
-        android:id="@+id/courseBookedFragment"
+        android:id="@+id/courseOrderTabFragment"
         android:icon="@drawable/ic_courses"
-        android:title="Kursus" />
+        android:title="Data Kursus" />
 </menu>

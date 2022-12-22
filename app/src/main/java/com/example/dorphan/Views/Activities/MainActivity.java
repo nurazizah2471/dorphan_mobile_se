@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        AppBarConfiguration configuration = new AppBarConfiguration.Builder(R.id.findSkillFragment, R.id.courseBookedFragment).build();
+        AppBarConfiguration configuration = new AppBarConfiguration.Builder(R.id.findSkillFragment, R.id.courseOrderTabFragment).build();
         navController = navFragmentMainMenu.getNavController();
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.loginFragment

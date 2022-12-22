@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.example.dorphan.Adapters.rvAdapterFindTutorFragment;
 import com.example.dorphan.Helpers.SharedPreferenceHelper;
 import com.example.dorphan.Models.Course;
+import com.example.dorphan.Models.CourseBooking;
 import com.example.dorphan.R;
 import com.example.dorphan.ViewModels.CourseBookingViewModel;
 import com.example.dorphan.ViewModels.CourseViewModel;
@@ -94,7 +95,8 @@ public class CourseBookingDetailFragment extends Fragment {
             textViewCourseToolDescriptionCourseBookingDetailFragment, textViewCourseTimeCourseBookingDetailFragment,
             textViewCourseDayCourseBookingDetailFragment, textViewCourseHourSumCourseBookingDetailFragment,
             textViewCourseToolPriceCourseBookingDetailFragment, textViewCoursePriceSumCourseBookingDetailFragment,
-            textViewMemberSumMaximalDescriptionCourseBookingDetailFragment, textViewMemberSumCourseBookingDetailFragment;
+            textViewMemberSumMaximalDescriptionCourseBookingDetailFragment, textViewMemberSumCourseBookingDetailFragment,
+            textViewCourseStatusCourseBookingDetailFragment;
     private TextInputLayout textInputLayoutMemberSumCourseBookingDetailFragment;
     private Button buttonReservationCourseBookingDetailFragment;
     private int memberSumTextInputLayout, memberSum;
@@ -111,9 +113,9 @@ public class CourseBookingDetailFragment extends Fragment {
             courseViewModelCourseBookingDetailFragment.getCourses(courseId);
             courseViewModelCourseBookingDetailFragment.getResultForCoursesDetail().observe(getActivity(), showResultForCoursesDetail);
         } else {
-//            courseBookingViewModelCourseBookingDetailFragment.init(helperCourseBookingDetailFragment.getAccessToken()); //unsend
-//            courseBookingViewModelCourseBookingDetailFragment.getCourseBooking(courseBookingId);
-//            courseBookingViewModelCourseBookingDetailFragment.getResultCourseBooking().observe(getActivity(), showResultCourseBooking);
+            courseBookingViewModelCourseBookingDetailFragment.init(helperCourseBookingDetailFragment.getAccessToken()); //unsend
+            courseBookingViewModelCourseBookingDetailFragment.getCourseBooking(courseBookingId);
+            courseBookingViewModelCourseBookingDetailFragment.getResultCourseBooking().observe(getActivity(), showResultForCoursesBookingDetail);
         }
         //checkButtonReservation();
         reservationProccess();
@@ -162,14 +164,37 @@ public class CourseBookingDetailFragment extends Fragment {
         }
     };
 
-//    private Observer<List<CourseBooking.Result>> showResultCourseBooking = new Observer<List<CourseBooking.Result>>() {
-//        @Override
-//        public void onChanged(List<CourseBooking.Result> results) {
-//            if (results != null) {
-//               // textViewMemberSumCourseBookingDetailFragment.setText(results.get(0).get);
-//            }
-//        }
-//    };
+    private Observer<List<CourseBooking.Result>> showResultForCoursesBookingDetail = new Observer<List<CourseBooking.Result>>() {
+        @Override
+        public void onChanged(List<CourseBooking.Result> results) {
+            if (results != null) {
+
+                textViewTutorNameCourseBookingDetailFragment.setText(results.get(0).getTutor_user().getName());
+                textViewTutorGenderCourseBookingDetailFragment.setText(results.get(0).getTutor_user().getGender());
+                textViewCourseStatusCourseBookingDetailFragment.setText(results.get(0).getStatus());
+
+                if (results.get(0).getCourse().getIs_online() == 1) {
+                    textViewIsOnlineCourseBookingDetailFragment.setText("Daring");
+                    textViewIsOnlineCourseBookingDetailFragment.setTextColor(getResources().getColor(R.color.green500));
+                } else {
+                    textViewIsOnlineCourseBookingDetailFragment.setText("Luring");
+                    textViewIsOnlineCourseBookingDetailFragment.setTextColor(getResources().getColor(R.color.red500));
+                }
+
+                textViewCourseNameCourseBookingDetailFragment.setText(results.get(0).getSkill().getName());
+                textViewCourseDescriptionCourseBookingDetailFragment.setText(results.get(0).getCourse().getDescription());
+                textViewCourseLocationCourseBookingDetailFragment.setText(results.get(0).getLocation());
+                textViewCourseToolDescriptionCourseBookingDetailFragment.setText(results.get(0).getCourse().getTool_description());
+                textViewCourseTimeCourseBookingDetailFragment.setText(results.get(0).getCourse().getStart_time());
+                textViewCourseDayCourseBookingDetailFragment.setText(results.get(0).getCourse().getDay());
+                textViewCourseHourSumCourseBookingDetailFragment.setText(String.valueOf(results.get(0).getCourse().getHour_sum()) + " Jam");
+                textViewCourseToolPriceCourseBookingDetailFragment.setText("Rp. " + String.valueOf(results.get(0).getCourse().getTool_price()));
+                textViewCoursePriceSumCourseBookingDetailFragment.setText("Rp. " + String.valueOf(results.get(0).getCourse().getPrice_sum()));
+                textViewMemberSumMaximalDescriptionCourseBookingDetailFragment.setText("Maksimum " + String.valueOf(results.get(0).getCourse().getMaximum_member()) + " Peserta Kursus");
+                textViewMemberSumCourseBookingDetailFragment.setText(String.valueOf(results.get(0).getMember_sum()) + " Peserta Kursus");
+            }
+        }
+    };
 
     private void initial() {
         textViewTutorNameCourseBookingDetailFragment = getActivity().findViewById(R.id.textViewTutorNameCourseBookingDetailFragment);
@@ -186,7 +211,7 @@ public class CourseBookingDetailFragment extends Fragment {
         textViewCoursePriceSumCourseBookingDetailFragment = getActivity().findViewById(R.id.textViewCoursePriceSumCourseBookingDetailFragment);
         textViewMemberSumMaximalDescriptionCourseBookingDetailFragment = getActivity().findViewById(R.id.textViewMemberSumMaximalDescriptionCourseBookingDetailFragment);
         textViewMemberSumCourseBookingDetailFragment = getActivity().findViewById(R.id.textViewMemberSumCourseBookingDetailFragment);
-
+        textViewCourseStatusCourseBookingDetailFragment = getActivity().findViewById(R.id.textViewCourseStatusCourseBookingDetailFragment);
         textInputLayoutMemberSumCourseBookingDetailFragment = getActivity().findViewById(R.id.textInputLayoutMemberSumCourseBookingDetailFragment);
 
         buttonReservationCourseBookingDetailFragment = getActivity().findViewById(R.id.buttonReservationCourseBookingDetailFragment);
@@ -199,12 +224,14 @@ public class CourseBookingDetailFragment extends Fragment {
             courseId = Integer.parseInt(getArguments().getString("courseId"));
             courseViewModelCourseBookingDetailFragment = new ViewModelProvider(getActivity()).get(CourseViewModel.class);
             textViewMemberSumCourseBookingDetailFragment.setVisibility(View.GONE);
+            textViewCourseStatusCourseBookingDetailFragment.setVisibility(View.GONE);
             textInputLayoutMemberSumCourseBookingDetailFragment.setVisibility(View.VISIBLE);
             buttonReservationCourseBookingDetailFragment.setVisibility(View.VISIBLE);
         } else {
             courseBookingId = Integer.parseInt(getArguments().getString("courseBookingId"));
             textViewMemberSumCourseBookingDetailFragment.setVisibility(View.VISIBLE);
             textInputLayoutMemberSumCourseBookingDetailFragment.setVisibility(View.GONE);
+            textViewCourseStatusCourseBookingDetailFragment.setVisibility(View.VISIBLE);
             buttonReservationCourseBookingDetailFragment.setVisibility(View.GONE);
         }
     }
@@ -216,7 +243,7 @@ public class CourseBookingDetailFragment extends Fragment {
 
                 try {
                     memberSumTextInputLayout = Integer.parseInt(textInputLayoutMemberSumCourseBookingDetailFragment.getEditText().getText().toString());
-                } catch (NumberFormatException ex) { // handle your exception
+                } catch (NumberFormatException ex) {
                 }
 
                 if (memberSumTextInputLayout > 0 && memberSumTextInputLayout <= memberSum) {
@@ -226,7 +253,6 @@ public class CourseBookingDetailFragment extends Fragment {
                     alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-//                            objMemberSumCourseBookingDetailFragment = Integer.parseInt(textInputLayoutMemberSumCourseBookingDetailFragment.getEditText().getText().toString());
 
                             courseBookingViewModelCourseBookingDetailFragment.init(helperCourseBookingDetailFragment.getAccessToken()); //unsend
 
@@ -262,16 +288,6 @@ public class CourseBookingDetailFragment extends Fragment {
             }
         });
     }
-
-//    private void checkButtonReservation() {
-//        if (textInputLayoutMemberSumCourseBookingDetailFragment.getEditText().getText().toString().trim() != null) {
-//            buttonReservationCourseBookingDetailFragment.setEnabled(true);
-//            buttonReservationCourseBookingDetailFragment.setBackgroundResource(R.color.blue500);
-//        } else {
-//            buttonReservationCourseBookingDetailFragment.setEnabled(false);
-//            buttonReservationCourseBookingDetailFragment.setBackgroundResource(R.color.grey500);
-//        }
-//    }
 
     @Override
     public void onDetach() {
